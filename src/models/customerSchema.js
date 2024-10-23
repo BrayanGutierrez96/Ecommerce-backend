@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     rol: {
       type: String,
-      enum: ["adim", "customer", "superAdmin", "seller"],
+      enum: ["admin", "customer", "superAdmin", "seller"],
       default: "customer",
     },
   },
