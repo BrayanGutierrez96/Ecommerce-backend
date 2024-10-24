@@ -31,16 +31,26 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre("save", async function(next){
+userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     try {
-      const passwordEncrypt = await bcrypt.hash(this.password, 8)
+      const passwordEncrypt = await bcrypt.hash(this.password, 8);
 
-      this.password = passwordEncrypt
+      this.password = passwordEncrypt;
     } catch (err) {
       console.log(err);
     }
   }
 });
+
+// deshashear la contrasena, para cuando se autentifique
+userSchema.methods.verifyPassword = async function (pass) {
+  try {
+    const compare = await bcrypt.compare(pass, this.password);
+    return compare;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const Users = model("Users", userSchema);
